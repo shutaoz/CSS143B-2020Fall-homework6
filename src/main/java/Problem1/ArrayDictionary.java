@@ -46,6 +46,30 @@ public class ArrayDictionary implements Dictionary {
     @Override
     public void remove(String key) {
         // homework
+        int hashKey = hashFunction(key);
+
+        if(!contains(key))
+            return;
+
+            //case 0 when there is no list chained to the existing one
+        else if(entries[hashKey].next == null)
+            entries[hashKey] = null;
+
+            //case 1 when there is chaining in the list and target is the first in the list
+        else if(getLoc(key).next != null)
+            entries[hashKey] = getLoc(key).next;
+
+            //case 2 when there is chaining but target is not the first
+        else
+            getPrev(key).next = getPrev(key).next.next;
+
+
+
+
+
+
+
+
     }
 
     @Override
@@ -65,6 +89,34 @@ public class ArrayDictionary implements Dictionary {
         }
         return null;
     }
+
+    public KVEntry getLoc(String key) {
+        int hashedKey = hashFunction(key);
+
+        KVEntry ptr = entries[hashedKey];
+        while (ptr != null) {
+            if (ptr.key.equals(key)) {
+                return ptr;
+            }
+            ptr = ptr.next;
+        }
+        return null;
+    }
+
+    public KVEntry getPrev(String key) {
+        int hashedKey = hashFunction(key);
+
+        KVEntry ptr = entries[hashedKey];
+        while (ptr.next != null) {
+            if (ptr.next.key.equals(key)) {
+                return ptr;
+            }
+            ptr = ptr.next;
+        }
+        return null;
+    }
+
+
 
     @Override
     public boolean contains(String key) {
